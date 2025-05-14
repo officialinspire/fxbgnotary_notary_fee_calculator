@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fredericksburg Notary Fee Calculator</title>
+  
+  <!-- Add professional legal fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Base styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Libre Baskerville', Georgia, serif; /* Professional legal font */
+    }
+    
+    body {
+      background-color: #f5f5f5;
+      color: #333;
+      line-height: 1.5;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Cormorant Garamond', serif; /* Elegant header font */
+      font-weight: 700;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    /* Calculator styles */
+    .calculator {
+      max-width: 1000px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+      overflow: hidden;
+      position: relative;
+      border: 1px solid #ddd;
+    }
+    
+    /* Virginia flag watermark */
+    .va-flag-watermark {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 80px;
+      opacity: 0.15;
+      z-index: 0;
+    }
+    
+    /* Header section */
+    .header {
+      position: relative;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .header-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(17, 24, 39, 0.2); /* Reduced opacity to make background more visible */
+      z-index: 1;
+    }
+    
+    .header-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('background.png');
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .header-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20px;
+    }
+    
+    .va-flag {
+      height: 100px; /* Larger logo */
+      margin-right: 20px;
+    }
+    
+    .header-title {
+      color: white;
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: right;
+      padding: 0 16px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .header-logo {
+      height: 150px; /* Larger logo */
+      margin-left: 15px;
+      /* Remove border and shadow */
+      border-radius: 0;
+      box-shadow: none;
+    }
+    
+    /* Calculator content */
+    .calculator-content {
+      padding: 24px;
+      position: relative;
+      z-index: 1;
+      background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent */
+    }
+    
+    @media (min-width: 768px) {
+      .calculator-content {
+        padding: 32px;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .calculator-content {
+        display: flex;
+      }
+    }
+    
+    /* Left panel - Inputs */
+    .inputs-panel {
+      margin-bottom: 24px;
+      position: relative;
+    }
+    
+    @media (min-width: 1024px) {
+      .inputs-panel {
+        width: 50%;
+        padding-right: 32px;
+        margin-bottom: 0;
+        border-right: 1px solid #e5e7eb;
+      }
+    }
+    
+    .input-group {
+      margin-bottom: 28px;
+    }
+    
+    .input-label {
+      display: block;
+      color: #1f2937;
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+    }
+    
+    .number-input {
+      display: flex;
+      align-items: center;
+    }
+    
+    .number-btn {
+      background-color: #e5e7eb;
+      color: #111827;
+      font-weight: 700;
+      padding: 10px 18px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-family: 'Libre Baskerville', Georgia, serif;
+    }
+    
+    .number-btn:hover {
+      background-color: #d1d5db;
+    }
+    
+    .number-btn-left {
+      border-top-left-radius: 0.25rem;
+      border-bottom-left-radius: 0.25rem;
+    }
+    
+    .number-btn-right {
+      border-top-right-radius: 0.25rem;
+      border-bottom-right-radius: 0.25rem;
+    }
+    
+    .number-input input {
+      padding: 10px 16px;
+      border: 1px solid #d1d5db;
+      text-align: center;
+      width: 64px;
+      font-family: 'Libre Baskerville', Georgia, serif;
+    }
+    
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+    }
+    
+    .checkbox-input {
+      height: 18px;
+      width: 18px;
+      color: #2563eb;
+    }
+    
+    .checkbox-text {
+      margin-left: 10px;
+      color: #1f2937;
+      font-weight: 600;
+    }
+    
+    .travel-options {
+      margin-top: 15px;
+      margin-left: 28px;
+    }
+    
+    .radio-label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .radio-input {
+      height: 16px;
+      width: 16px;
+      color: #2563eb;
+    }
+    
+    .radio-text {
+      margin-left: 10px;
+      color: #4b5563;
+    }
+    
+    /* Right panel - Results */
+    .results-panel {
+      background-color: rgba(243, 244, 246, 0.8); /* Slightly transparent */
+      padding: 28px;
+      border-radius: 0.5rem;
+      position: relative;
+    }
+    
+    @media (min-width: 1024px) {
+      .results-panel {
+        width: 50%;
+      }
+    }
+    
+    .results-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    
+    .results-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 10px;
+    }
+    
+    .results-fee {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #2563eb;
+    }
+    
+    .fee-breakdown {
+      margin-bottom: 32px;
+    }
+    
+    .fee-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .fee-item:last-child {
+      padding-top: 12px;
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+    
+    .fee-label {
+      display: flex;
+      align-items: center;
+      color: #1f2937;
+      font-size: 1.05rem;
+    }
+    
+    .fee-label-bold {
+      font-weight: 700;
+    }
+    
+    .fee-icon {
+      color: #2563eb;
+      margin-right: 12px;
+    }
+    
+    .fee-value {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    
+    .fee-value-bold {
+      font-weight: 700;
+      font-size: 1.4rem;
+    }
+    
+    .book-btn {
+      width: 100%;
+      background-color: #2563eb;
+      color: white;
+      font-weight: 700;
+      padding: 14px 18px;
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-size: 1.1rem;
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .book-btn:hover {
+      background-color: #1d4ed8;
+    }
+    
+    .official-seal {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 80px;
+      height: 80px;
+      opacity: 0.1;
+      z-index: 0;
+    }
+    
+    /* Footer */
+    .footer {
+      background-color: #1f2937;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .footer-logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+    
+    .footer-va-flag {
+      height: 30px;
+      margin-right: 15px;
+    }
+    
+    .footer a {
+      color: #93c5fd;
+      text-decoration: none;
+    }
+    
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    
+    .footer p {
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="calculator">
+      <!-- Virginia flag watermark -->
+      <img src="virginia_flag.png" alt="Virginia Flag Watermark" class="va-flag-watermark">
+      
+      <!-- Header -->
+      <div class="header">
+        <div class="header-bg"></div>
+        <div class="header-overlay"></div>
+        <div class="header-content">
+          <!-- Virginia flag on the left -->
+          <img src="virginia_flag.png" alt="Virginia Flag" class="va-flag">
+          
+          <!-- Title in the center -->
+          <h1 class="header-title">Notary Fee Calculator</h1>
+          
+          <!-- FXBG Notary logo on the right - try multiple file variations -->
+          <img 
+            id="header-logo" 
+            alt="Fredericksburg Notary Logo" 
+            class="header-logo">
+        </div>
+      </div>
+      
+      <!-- Calculator Content -->
+      <div class="calculator-content">
+        <!-- Left Panel - Inputs -->
+        <div class="inputs-panel">
+          <div class="input-group">
+            <label class="input-label">Number of Documents</label>
+            <div class="number-input">
+              <button class="number-btn number-btn-left" id="doc-minus">-</button>
+              <input type="number" min="1" value="1" id="doc-count">
+              <button class="number-btn number-btn-right" id="doc-plus">+</button>
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <label class="input-label">Notarizations Per Document</label>
+            <div class="number-input">
+              <button class="number-btn number-btn-left" id="notarization-minus">-</button>
+              <input type="number" min="1" value="1" id="notarization-count">
+              <button class="number-btn number-btn-right" id="notarization-plus">+</button>
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <label class="checkbox-label">
+              <input type="checkbox" class="checkbox-input" id="travel-required">
+              <span class="checkbox-text">Mobile Notary (Travel Required)</span>
+            </label>
+            
+            <div class="travel-options" id="travel-options" style="display: none;">
+              <label class="radio-label">
+                <input type="radio" name="travel-distance" value="within" class="radio-input" id="within-range" checked>
+                <span class="radio-text">Within Range (≤10 miles of Fredericksburg, Stafford, Spotsylvania)</span>
+              </label>
+              
+              <label class="radio-label">
+                <input type="radio" name="travel-distance" value="out" class="radio-input" id="out-of-range">
+                <span class="radio-text">Out of Range (15+ miles from Fredericksburg, Stafford, Spotsylvania)</span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <label class="checkbox-label">
+              <input type="checkbox" class="checkbox-input" id="after-hours">
+              <span class="checkbox-text">After Hours Service (Evenings/Weekends)</span>
+            </label>
+          </div>
+        </div>
+        
+        <!-- Right Panel - Results -->
+        <div class="results-panel">
+          <div class="results-header">
+            <h2 class="results-title">Estimated Fee</h2>
+            <div class="results-fee" id="total-fee">$10</div>
+          </div>
+          
+          <div class="fee-breakdown">
+            <div class="fee-item">
+              <div class="fee-label">
+                <svg class="fee-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <span>Notarization Fee:</span>
+              </div>
+              <span class="fee-value" id="notarization-fee">$10</span>
+            </div>
+            
+            <div class="fee-item">
+              <div class="fee-label">
+                <svg class="fee-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span>Travel Fee:</span>
+              </div>
+              <span class="fee-value" id="travel-fee">$0</span>
+            </div>
+            
+            <div class="fee-item">
+              <div class="fee-label">
+                <svg class="fee-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>After Hours Fee:</span>
+              </div>
+              <span class="fee-value" id="after-hours-fee">$0</span>
+            </div>
+            
+            <div class="fee-item">
+              <div class="fee-label fee-label-bold">
+                <svg class="fee-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="1" x2="12" y2="23"></line>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                <span>Total:</span>
+              </div>
+              <span class="fee-value fee-value-bold" id="total-fee-bottom">$10</span>
+            </div>
+          </div>
+          
+          <button class="book-btn" onclick="window.location.href='https://fxbgnotary.com/pages/contact'">
+            Book Now
+          </button>
+        </div>
+      </div>
+      
+      <!-- Footer -->
+      <div class="footer">
+        <div class="footer-logo-container">
+          <img src="virginia_flag.png" alt="Virginia Flag" class="footer-va-flag">
+          <span>Commonwealth of Virginia Notary Public</span>
+        </div>
+        <p>Rates effective as of May 2025. All fees are in accordance with Virginia notary regulations.</p>
+        <p>For questions, contact us at <a href="mailto:zach@fxbgnotary.com">zach@fxbgnotary.com</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Get all the elements we need to interact with
+    const docCount = document.getElementById('doc-count');
+    const docMinus = document.getElementById('doc-minus');
+    const docPlus = document.getElementById('doc-plus');
+    
+    const notarizationCount = document.getElementById('notarization-count');
+    const notarizationMinus = document.getElementById('notarization-minus');
+    const notarizationPlus = document.getElementById('notarization-plus');
+    
+    const travelRequired = document.getElementById('travel-required');
+    const travelOptions = document.getElementById('travel-options');
+    const withinRange = document.getElementById('within-range');
+    const outOfRange = document.getElementById('out-of-range');
+    
+    const afterHours = document.getElementById('after-hours');
+    
+    const totalFee = document.getElementById('total-fee');
+    const totalFeeBottom = document.getElementById('total-fee-bottom');
+    const notarizationFee = document.getElementById('notarization-fee');
+    const travelFee = document.getElementById('travel-fee');
+    const afterHoursFee = document.getElementById('after-hours-fee');
+    
+    // Try all possible logo files
+    function loadLogo() {
+      const headerLogo = document.getElementById('header-logo');
+      
+      // Array of possible logo files in order of preference
+      const logoFiles = [
+        'fxbgnotary_logo_01_transparent.png',
+        'fxbgnotary_logo_02_transparent.png',
+        'fxbgnotary_logo_01.jpg',
+        'fxbgnotary_logo_02.jpg',
+        'fxbgnotary_logo_01_alt.jpg'
+      ];
+      
+      // Test each file - we'll try to load each one
+      function testImage(url, callback) {
+        const img = new Image();
+        img.onload = function() { callback(true); };
+        img.onerror = function() { callback(false); };
+        img.src = url;
+      }
+      
+      function tryLogoFiles(index) {
+        if (index >= logoFiles.length) {
+          // We've tried all files and none worked, use a fallback text
+          console.log("All logo files failed to load");
+          headerLogo.style.display = 'none';
+          return;
+        }
+        
+        testImage(logoFiles[index], function(exists) {
+          if (exists) {
+            headerLogo.src = logoFiles[index];
+            headerLogo.style.display = 'block';
+          } else {
+            tryLogoFiles(index + 1);
+          }
+        });
+      }
+      
+      // Start trying logo files
+      tryLogoFiles(0);
+    }
+    
+    // Set up event listeners
+    docMinus.addEventListener('click', () => {
+      const currentValue = parseInt(docCount.value) || 1;
+      docCount.value = Math.max(1, currentValue - 1);
+      calculateFees();
+    });
+    
+    docPlus.addEventListener('click', () => {
+      const currentValue = parseInt(docCount.value) || 1;
+      docCount.value = currentValue + 1;
+      calculateFees();
+    });
+    
+    notarizationMinus.addEventListener('click', () => {
+      const currentValue = parseInt(notarizationCount.value) || 1;
+      notarizationCount.value = Math.max(1, currentValue - 1);
+      calculateFees();
+    });
+    
+    notarizationPlus.addEventListener('click', () => {
+      const currentValue = parseInt(notarizationCount.value) || 1;
+      notarizationCount.value = currentValue + 1;
+      calculateFees();
+    });
+    
+    docCount.addEventListener('input', calculateFees);
+    notarizationCount.addEventListener('input', calculateFees);
+    
+    travelRequired.addEventListener('change', () => {
+      travelOptions.style.display = travelRequired.checked ? 'block' : 'none';
+      calculateFees();
+    });
+    
+    withinRange.addEventListener('change', calculateFees);
+    outOfRange.addEventListener('change', calculateFees);
+    afterHours.addEventListener('change', calculateFees);
+    
+    // Function to calculate fees
+    function calculateFees() {
+      const documents = parseInt(docCount.value) || 1;
+      const notarizationsPerDoc = parseInt(notarizationCount.value) || 1;
+      
+      // Calculate notarization fee: $10 per notarization
+      const notarizationFeeValue = documents * notarizationsPerDoc * 10;
+      
+      // Calculate travel fee
+      let travelFeeValue = 0;
+      if (travelRequired.checked) {
+        travelFeeValue = withinRange.checked ? 20 : 30;
+      }
+      
+      // Calculate after hours fee
+      const afterHoursFeeValue = afterHours.checked ? 25 : 0;
+      
+      // Calculate total fee
+      const totalFeeValue = notarizationFeeValue + travelFeeValue + afterHoursFeeValue;
+      
+      // Update the UI
+      notarizationFee.textContent = `$${notarizationFeeValue}`;
+      travelFee.textContent = `$${travelFeeValue}`;
+      afterHoursFee.textContent = `$${afterHoursFeeValue}`;
+      totalFee.textContent = `$${totalFeeValue}`;
+      totalFeeBottom.textContent = `$${totalFeeValue}`;
+    }
+    
+    // Initialize the calculator
+    calculateFees();
+    
+    // Load the logo when the page loads
+    window.addEventListener('DOMContentLoaded', loadLogo);
+  </script>
+</body>
+</html>
